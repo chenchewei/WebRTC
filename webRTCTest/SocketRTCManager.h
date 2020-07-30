@@ -10,6 +10,23 @@
 
 @protocol SocketRTCManagerDelegate
 
+/**
+ 
+ joined     
+ otherJoin (createPeerConnection)
+ full      (socket disConnect / remove localStream)
+ leaved    (socket disConnect)
+ disconnect(remove localStream)
+ 
+ 
+ offer     (setRemoteDescription/sendAnswer)
+ answer
+ candidates
+ 
+ */
+
+
+
 - (void)socketConnected:(NSArray*)data;
 
 - (void)socketDisConnected;
@@ -17,23 +34,16 @@
 - (void)socketError;
 
 //stream callback
-- (void)streamBusy;
 
-- (void)streamNoReply;
+- (void)streamReceiveStartCall:(NSArray *)data;
 
-- (void)streamStart;
+- (void)streamReceiveNewRoom:(NSArray *)data;
 
-- (void)streamFinish;
+- (void)streamReceiveOffer:(NSArray *)data;
 
-- (void)streamForceFinish;
+- (void)streamReceiveAnswer:(NSArray *)data;
 
-- (void)streamReject;
-
-- (void)streamRejected;
-
-- (void)streamCreated;
-
-- (void)streamJoined;
+- (void)streamReceiveCandidates:(NSArray *)data;
 
 - (void)streamCancel;
 
@@ -52,19 +62,14 @@
 
 - (void)killHandlerAndDisConnect;
 
-- (BOOL)createToStreamWithRoomID:(NSString*)roomID targetID:(NSString*)targetID;
+- (BOOL)startCallToStreamWithRoomID:(NSString*)roomID targetID:(NSString*)targetID;
 
-- (void)signToStreamWithRoomType:(int)roomType isVideo:(BOOL)isVideo roomID:(NSString*)roomID targetID:(NSString*)targetID;
+- (void)newRoomToStreamWithRoomID:(NSString*)roomID targetID:(NSString*)targetID;
 
-- (void)joinToStreamWithRoomID:(NSString*)roomID;
+- (void)sendOfferToStreamWithDic:(NSDictionary *)dic;
 
-- (void)cancelToStreamWithRoomID:(NSString*)roomID isNoReply:(BOOL)isNoReply;
+- (void)answerToStreamWithDic:(NSDictionary *)dic;
 
-- (void)rejectToStreamWithRoomID:(NSString*)roomID;
-
-- (void)finishToStreamWithRoomID:(NSString*)roomID;
-
-- (void)noReplyToStreamWithRoomID:(NSString*)roomID;
-
+- (void)sendCandidatesToStreamWithDic:(NSDictionary *)dic;
 @end
 

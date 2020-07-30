@@ -17,7 +17,6 @@
 		3500886724C817D000EA58C8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3500886624C817D000EA58C8 /* main.m */; };
 		3500887124C817D000EA58C8 /* webRTCTestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3500887024C817D000EA58C8 /* webRTCTestTests.m */; };
 		3500887C24C817D000EA58C8 /* webRTCTestUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3500887B24C817D000EA58C8 /* webRTCTestUITests.m */; };
-		3500888D24C81BF400EA58C8 /* RTCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3500888C24C81BF400EA58C8 /* RTCManager.m */; };
 		35F6091424C92D770075B066 /* SocketRTCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35F6091324C92D770075B066 /* SocketRTCManager.m */; };
 		45E53F19B4DAA4DC7E5D4BBA /* Pods_webRTCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 731056D1C53403F0288EB872 /* Pods_webRTCTest.framework */; };
 		DEB6613A5B7A23D93828FAB1 /* Pods_webRTCTest_webRTCTestUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 282E2CB76AE18D975E34E7F3 /* Pods_webRTCTest_webRTCTestUITests.framework */; };
@@ -60,8 +59,6 @@
 		3500887724C817D000EA58C8 /* webRTCTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = webRTCTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3500887B24C817D000EA58C8 /* webRTCTestUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = webRTCTestUITests.m; sourceTree = "<group>"; };
 		3500887D24C817D000EA58C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3500888B24C81BF400EA58C8 /* RTCManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCManager.h; sourceTree = "<group>"; };
-		3500888C24C81BF400EA58C8 /* RTCManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTCManager.m; sourceTree = "<group>"; };
 		35F6091224C92D770075B066 /* SocketRTCManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SocketRTCManager.h; sourceTree = "<group>"; };
 		35F6091324C92D770075B066 /* SocketRTCManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SocketRTCManager.m; sourceTree = "<group>"; };
 		35F6091924C938110075B066 /* webRTC-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "webRTC-Prefix.pch"; sourceTree = "<group>"; };
@@ -140,8 +137,6 @@
 				3500886224C817D000EA58C8 /* LaunchScreen.storyboard */,
 				3500886524C817D000EA58C8 /* Info.plist */,
 				3500886624C817D000EA58C8 /* main.m */,
-				3500888B24C81BF400EA58C8 /* RTCManager.h */,
-				3500888C24C81BF400EA58C8 /* RTCManager.m */,
 				35F6091224C92D770075B066 /* SocketRTCManager.h */,
 				35F6091324C92D770075B066 /* SocketRTCManager.m */,
 			);
@@ -429,7 +424,6 @@
 			files = (
 				35F6091424C92D770075B066 /* SocketRTCManager.m in Sources */,
 				3500885C24C817CD00EA58C8 /* ViewController.m in Sources */,
-				3500888D24C81BF400EA58C8 /* RTCManager.m in Sources */,
 				3500885624C817CD00EA58C8 /* AppDelegate.m in Sources */,
 				3500886724C817D000EA58C8 /* main.m in Sources */,
 				3500885924C817CD00EA58C8 /* SceneDelegate.m in Sources */,
@@ -604,9 +598,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DVK8V4759Q;
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "webRTC-Prefix.pch";
 				INFOPLIST_FILE = webRTCTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -624,9 +620,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DVK8V4759Q;
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "webRTC-Prefix.pch";
 				INFOPLIST_FILE = webRTCTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

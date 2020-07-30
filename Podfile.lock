@@ -1,28 +1,24 @@
 PODS:
-  - libjingle_peerconnection (11177.2.0)
   - Socket.IO-Client-Swift (15.2.0):
     - Starscream (~> 3.1)
   - Starscream (3.1.1)
   - WebRTC (63.11.20455)
 
 DEPENDENCIES:
-  - libjingle_peerconnection
   - Socket.IO-Client-Swift (~> 15.2.0)
   - WebRTC
 
 SPEC REPOS:
   trunk:
-    - libjingle_peerconnection
     - Socket.IO-Client-Swift
     - Starscream
     - WebRTC
 
 SPEC CHECKSUMS:
-  libjingle_peerconnection: 3458f646ddd61f08a9f3a0c43fb01fff5c165eb8
   Socket.IO-Client-Swift: 1e3e3a1f09f3312a167f0d781eb2f383d477357c
   Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
   WebRTC: f2a6203584745fe53532633397557876b5d71640
 
-PODFILE CHECKSUM: f7edf89f39ece8ca464056827c1c63841309a181
+PODFILE CHECKSUM: 29599993d20acfc817a2351309247cfa9e11e97d
 
 COCOAPODS: 1.8.4

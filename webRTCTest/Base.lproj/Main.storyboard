@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -16,30 +17,77 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qtL-RV-ImI">
-                                <rect key="frame" x="186" y="44" width="42" height="21"/>
+                                <rect key="frame" x="186" y="44" width="42" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Br1-Ll-jZz">
-                                <rect key="frame" x="188.5" y="430" width="37" height="36"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="Join"/>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Br1-Ll-jZz">
+                                <rect key="frame" x="15" y="427" width="384" height="42"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" title="Join Room"/>
                                 <connections>
                                     <action selector="joinRoom:" destination="BYZ-38-t0r" eventType="touchUpInside" id="286-zq-XXq"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aa8-YR-kjP">
+                                <rect key="frame" x="136.5" y="164.5" width="141" height="42"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" title="Create Room"/>
+                                <connections>
+                                    <action selector="createRoom:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dI0-YG-1dh"/>
+                                </connections>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="202" translatesAutoresizingMaskIntoConstraints="NO" id="eyA-zU-N0a">
+                                <rect key="frame" x="25" y="231.5" width="364" height="20.5"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Offer:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="19A-B1-STb">
+                                        <rect key="frame" x="0.0" y="0.0" width="81" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Answer:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="KhB-Po-zIj">
+                                        <rect key="frame" x="283" y="0.0" width="81" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Soh-PS-aa9">
+                                <rect key="frame" x="186.5" y="619" width="41" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="擴音"/>
+                                <state key="selected" title="手持"/>
+                                <connections>
+                                    <action selector="muteBtnClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6M2-CT-lpi"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="eyA-zU-N0a" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="0gI-or-RWQ"/>
                             <constraint firstItem="qtL-RV-ImI" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ftw-j4-Sjc"/>
                             <constraint firstItem="Br1-Ll-jZz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="GBC-E0-2al"/>
+                            <constraint firstItem="aa8-YR-kjP" firstAttribute="top" secondItem="qtL-RV-ImI" secondAttribute="bottom" constant="100" id="GZZ-cT-biE"/>
+                            <constraint firstItem="Soh-PS-aa9" firstAttribute="top" secondItem="Br1-Ll-jZz" secondAttribute="bottom" constant="150" id="HlE-OP-FOU"/>
+                            <constraint firstItem="aa8-YR-kjP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ida-YQ-aVO"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Br1-Ll-jZz" secondAttribute="trailing" constant="15" id="KSd-Dj-G9S"/>
+                            <constraint firstItem="Br1-Ll-jZz" firstAttribute="top" relation="greaterThanOrEqual" secondItem="eyA-zU-N0a" secondAttribute="bottom" constant="30" id="LOs-Ky-drZ"/>
+                            <constraint firstItem="Soh-PS-aa9" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bpR-CA-uZF"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="eyA-zU-N0a" secondAttribute="trailing" constant="25" id="cUb-Zi-TK6"/>
                             <constraint firstItem="qtL-RV-ImI" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="gFY-1f-CVr"/>
+                            <constraint firstItem="eyA-zU-N0a" firstAttribute="top" secondItem="aa8-YR-kjP" secondAttribute="bottom" constant="25" id="t4t-7q-woI"/>
                             <constraint firstItem="Br1-Ll-jZz" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="vsI-2z-bfA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="answerStatus" destination="KhB-Po-zIj" id="LUL-k2-k3V"/>
+                        <outlet property="createRoomBtn" destination="aa8-YR-kjP" id="e6k-Qk-E0W"/>
+                        <outlet property="joinRoomBtn" destination="Br1-Ll-jZz" id="K8A-JY-8cY"/>
+                        <outlet property="offerStatus" destination="19A-B1-STb" id="NbL-yV-uQa"/>
                         <outlet property="socketStatus" destination="qtL-RV-ImI" id="0C0-2z-LbZ"/>
                     </connections>
                 </viewController>
