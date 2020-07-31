@@ -6,7 +6,7 @@
 //  Copyright © 2020 SamWu. All rights reserved.
 //
 
-#define DEVELOP_SocketURL @"https://4084967206c3.ngrok.io"
+#define DEVELOP_SocketURL @"https://f72b322f5e64.ngrok.io"
 
 #import "SocketRTCManager.h"
 
@@ -46,13 +46,20 @@ static SocketRTCManager *socketRTCManager = nil;
 - (void)connect{
     
     [socketClient connectWithTimeoutAfter:5.0 withHandler:^{
-           NSLog(@"[RTCSocket] [on] Connect timeout");
-       }];
+        NSLog(@"[RTCSocket] [on] Connect timeout");
+    }];
     
     [socketClient on:@"startCall" callback:^(NSArray *data, SocketAckEmitter *ack) {
         
         NSLog(@"[RTCSocket] [on] startCall");
         [_delegate streamReceiveStartCall:data];
+        
+    }];
+    
+    [socketClient on:@"connectedData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ack) {
+       
+        NSLog(@"[RTCSocket] [on] connectedData\n==>%@",data);
+        [_delegate streamConnectedData:data];
         
     }];
     
@@ -127,19 +134,20 @@ static SocketRTCManager *socketRTCManager = nil;
     }
 }
 
-- (void)newRoomToStreamWithRoomID:(NSString*)roomID targetID:(NSString*)targetID{
-    NSDictionary *dic = @{@"roomID"   :roomID,
-                          @"targetID" :targetID};
+- (void)newRoomToStreamWithSocketID:(NSString*)socketID roomID:(NSString *)roomID{
+    NSDictionary *dic = @{@"socketID"   :socketID,
+                          @"roomID"     :roomID};
     
     [socketClient emit:@"newRoom" with:@[dic]];
 }
 
-- (BOOL)startCallToStreamWithRoomID:(NSString*)roomID targetID:(NSString*)targetID{
+- (BOOL)startCallToStreamWithSocketRoom:(NSString*)socketRoom SocketID:(NSString *)socketID{
     if(socketClient.status == SocketIOStatusConnected){
         NSLog(@"[RTCSocket] [emit] startCall");
         
-        NSDictionary *dic = @{@"roomID"   :roomID,
-                              @"targetID" :targetID};
+        NSDictionary *dic = @{@"socketRoom":socketRoom,
+                              @"socketID":socketID
+                              };
         
         [socketClient emit:@"startCall" with:@[dic]];
     }

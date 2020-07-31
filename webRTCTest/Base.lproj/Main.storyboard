@@ -39,7 +39,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="202" translatesAutoresizingMaskIntoConstraints="NO" id="eyA-zU-N0a">
-                                <rect key="frame" x="25" y="231.5" width="364" height="20.5"/>
+                                <rect key="frame" x="25" y="791.5" width="364" height="20.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Offer:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="19A-B1-STb">
                                         <rect key="frame" x="0.0" y="0.0" width="81" height="20.5"/>
@@ -56,7 +56,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Soh-PS-aa9">
-                                <rect key="frame" x="186.5" y="619" width="41" height="36"/>
+                                <rect key="frame" x="323" y="619" width="41" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="擴音"/>
                                 <state key="selected" title="手持"/>
@@ -64,21 +64,31 @@
                                     <action selector="muteBtnClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6M2-CT-lpi"/>
                                 </connections>
                             </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bIE-h7-eWq">
+                                <rect key="frame" x="20" y="280" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="joinTestRoom:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BOJ-XA-6Ph"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="eyA-zU-N0a" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="0gI-or-RWQ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="eyA-zU-N0a" secondAttribute="bottom" constant="50" id="4Cg-xw-D6u"/>
+                            <constraint firstItem="Br1-Ll-jZz" firstAttribute="top" secondItem="bIE-h7-eWq" secondAttribute="bottom" constant="117" id="4SO-P3-cYZ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="bIE-h7-eWq" secondAttribute="trailing" constant="348" id="AIQ-hP-Mbi"/>
                             <constraint firstItem="qtL-RV-ImI" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ftw-j4-Sjc"/>
                             <constraint firstItem="Br1-Ll-jZz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="GBC-E0-2al"/>
                             <constraint firstItem="aa8-YR-kjP" firstAttribute="top" secondItem="qtL-RV-ImI" secondAttribute="bottom" constant="100" id="GZZ-cT-biE"/>
                             <constraint firstItem="Soh-PS-aa9" firstAttribute="top" secondItem="Br1-Ll-jZz" secondAttribute="bottom" constant="150" id="HlE-OP-FOU"/>
                             <constraint firstItem="aa8-YR-kjP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ida-YQ-aVO"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Br1-Ll-jZz" secondAttribute="trailing" constant="15" id="KSd-Dj-G9S"/>
-                            <constraint firstItem="Br1-Ll-jZz" firstAttribute="top" relation="greaterThanOrEqual" secondItem="eyA-zU-N0a" secondAttribute="bottom" constant="30" id="LOs-Ky-drZ"/>
-                            <constraint firstItem="Soh-PS-aa9" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bpR-CA-uZF"/>
+                            <constraint firstItem="bIE-h7-eWq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="OqK-iy-46H"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Soh-PS-aa9" secondAttribute="trailing" constant="50" id="TNW-eT-NHw"/>
+                            <constraint firstItem="bIE-h7-eWq" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="236" id="ZMn-4h-qC2"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="eyA-zU-N0a" secondAttribute="trailing" constant="25" id="cUb-Zi-TK6"/>
                             <constraint firstItem="qtL-RV-ImI" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="gFY-1f-CVr"/>
-                            <constraint firstItem="eyA-zU-N0a" firstAttribute="top" secondItem="aa8-YR-kjP" secondAttribute="bottom" constant="25" id="t4t-7q-woI"/>
                             <constraint firstItem="Br1-Ll-jZz" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="vsI-2z-bfA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -86,7 +96,7 @@
                     <connections>
                         <outlet property="answerStatus" destination="KhB-Po-zIj" id="LUL-k2-k3V"/>
                         <outlet property="createRoomBtn" destination="aa8-YR-kjP" id="e6k-Qk-E0W"/>
-                        <outlet property="joinRoomBtn" destination="Br1-Ll-jZz" id="K8A-JY-8cY"/>
+                        <outlet property="joinBtn1" destination="bIE-h7-eWq" id="ZNR-68-5FR"/>
                         <outlet property="offerStatus" destination="19A-B1-STb" id="NbL-yV-uQa"/>
                         <outlet property="socketStatus" destination="qtL-RV-ImI" id="0C0-2z-LbZ"/>
                     </connections>

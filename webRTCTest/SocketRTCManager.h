@@ -35,6 +35,8 @@
 
 //stream callback
 
+- (void)streamConnectedData:(NSArray *)data;
+
 - (void)streamReceiveStartCall:(NSArray *)data;
 
 - (void)streamReceiveNewRoom:(NSArray *)data;
@@ -62,9 +64,9 @@
 
 - (void)killHandlerAndDisConnect;
 
-- (BOOL)startCallToStreamWithRoomID:(NSString*)roomID targetID:(NSString*)targetID;
+- (void)newRoomToStreamWithSocketID:(NSString*)socketID roomID:(NSString *)roomID;
 
-- (void)newRoomToStreamWithRoomID:(NSString*)roomID targetID:(NSString*)targetID;
+- (BOOL)startCallToStreamWithSocketRoom:(NSString*)socketRoom SocketID:(NSString *)socketID;
 
 - (void)sendOfferToStreamWithDic:(NSDictionary *)dic;
 

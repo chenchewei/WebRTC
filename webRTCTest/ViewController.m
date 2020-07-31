@@ -45,9 +45,13 @@ typedef enum : int{
 @property (strong,nonatomic) NSDictionary *startCallDic;
 
 @property (strong,nonatomic) NSMutableArray *roomList;
+@property (strong,nonatomic) NSString *socketRoom;
+@property (strong,nonatomic) NSString *socketID;
 @property (strong,nonatomic) NSString *targetID;
 @property (strong,nonatomic) NSString *userID;
 @property (strong,nonatomic) NSString *roomID;
+
+@property (strong, nonatomic) IBOutlet UIButton *joinBtn1;
 
 @property (assign,nonatomic) Mode *mode;
 
@@ -183,7 +187,7 @@ typedef enum : int{
         // Turn off the speaker
         sender.selected = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
 //            [self.view makeToast:@"關閉擴音"];
-        sender.titleLabel.text = @"擴音";
+        [sender setTitle:@"擴音" forState:UIControlStateNormal];
     }
     else {
         NSError *error = nil;
@@ -194,242 +198,54 @@ typedef enum : int{
         if (isSuccess) {
             sender.selected = !isSuccess;
 //            [self.view makeToast:@"開啟擴音"];
-            sender.titleLabel.text = @"手持";
+            [sender setTitle:@"手持" forState:UIControlStateNormal];
         }else{
             NSLog(@"%@",error.description);
         }
     }
 }
 
-//- (IBAction)createRoom:(id)sender {
-//    _userID = [[NSUUID new]UUIDString];
-//    _roomID = @"530TestRoom";
-//
-//    BOOL isJoinSuccessed = [_socketRTCManager startCallToStreamWithRoomID:_roomID targetID:_userID];
+- (IBAction)createRoom:(id)sender {
+
+    _userID = [[NSUUID new]UUIDString];
+    _roomID = @"530TestRoom";
+    
+    [_socketRTCManager newRoomToStreamWithSocketID:_socketID roomID:_roomID];
+    
+//    BOOL isJoinSuccessed = [_socketRTCManager startCallToStreamWithSocketID:_socketID targetID:_userID roomID:_roomID];
 //
 //    _socketStatus.text = (isJoinSuccessed)? @"正在建立房間" : @"Socket尚未連接，建立房間失敗";
-//
-//    [_socketRTCManager newRoomToStreamWithRoomID:_roomID targetID:_userID];
-//
-//}
+
+}
+
+- (IBAction)joinTestRoom:(UIButton *)sender {
+    _socketRoom = [sender.titleLabel.text componentsSeparatedByString:@"+"].firstObject;
+    
+    BOOL isJoinSuccessed = [_socketRTCManager startCallToStreamWithSocketRoom:_socketRoom SocketID:_socketID];
+    
+    _socketStatus.text = (isJoinSuccessed)? @"正在建立房間" : @"Socket尚未連接，建立房間失敗";
+    
+}
 
 - (IBAction)joinRoom:(id)sender {
     [self processLocalTask:_startCallDic];
     [self createOfferAndSetSDP];
 }
 
-#pragma mark - SocketRTCManagerDelegate
-- (void)socketConnected:(NSArray*)data{
-    _socketStatus.text = @"Socket Connected : 連線成功";
-        
-    _userID = [[NSUUID new]UUIDString];
-    _roomID = @"530TestRoom";
-    
-    BOOL isJoinSuccessed = [_socketRTCManager startCallToStreamWithRoomID:_roomID targetID:_userID];
-    
-    _socketStatus.text = (isJoinSuccessed)? @"正在建立房間" : @"Socket尚未連接，建立房間失敗";
-    
-//    //get data
-//    NSDictionary *dataDic = dic[@"data"];
-//    //get all of connections
-//    NSArray *connections = dataDic[@"connections"];
-//
-//    //add all of connection to array
-//    [_connectionIdArray addObjectsFromArray:connections];
-//
-//    //拿到给自己分配的ID
-//    //    _userId = dataDic[@"you"];
-//
-//    //create p2p object base on connectionIDArray
-//    [_connectionIdArray enumerateObjectsUsingBlock:^(NSString *connectionID, NSUInteger index, BOOL * _Nonnull stop) {
-//
-//        //根据连接ID去初始化 RTCPeerConnection 连接对象
-//        RTCPeerConnection *connection = [self createPeerConnection:connectionID];
-//
-//        //设置这个ID对应的 RTCPeerConnection对象
-//        _connectionDic[connectionID] = connection;
-//    }];
-//
-//    //给每一个点对点连接，都加上本地流
-//    [_connectionDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, RTCPeerConnection *connection, BOOL * _Nonnull stop) {
-//        if (!_localStream)
-//        {
-//            [self createLocalStreaming];
-//        }
-//
-//    }];
-       
-}
-
-- (void)streamReceiveStartCall:(NSArray *)data{
-    [_joinRoomBtn setHidden:false];
-    _startCallDic = data.firstObject;
-
-}
-
-- (void)streamReceiveNewRoom:(NSArray *)data{
-    NSDictionary *dic = data.firstObject;
-    _targetID = dic[@"targetID"];
-    _roomID = dic[@"roomID"];
-    
-    if(_roomID.length>0){
-        BOOL isExist = false;
-        for(NSString *str in _roomList)
-            isExist = ([str isEqualToString:_roomID]);
-        
-        if(!isExist)
-            [_roomList addObject:_roomID];
-        
-        [_joinRoomBtn setHidden:!(_roomID.length>0)];
-        _joinRoomBtn.titleLabel.text = [NSString stringWithFormat:@"Join to %@'s room",_targetID];
-    }
-}
-
-- (void)streamReceiveOffer:(NSArray *)data{
-
-    
-    NSDictionary *dic = data.firstObject;
-    
-    if([_userID isEqualToString:dic[@"targetID"]])return;
-    
-    NSLog(@"%s",__func__);
-    
-    NSString *str = [NSString stringWithFormat:@"userID : %@\ntargetID : %@",_userID,dic[@"targetID"]];
-    _offerStatus.text = [NSString stringWithFormat:@"Offer received\n\n%@",str];
-    
-    
-    __weak typeof(self) weakSelf = self;
-    
-    [self processLocalTask:dic];
-
-    RTCSessionDescription *sdp = [[RTCSessionDescription alloc]initWithType:[dic[@"type"]integerValue] sdp:dic[@"sdp"]];
-    
-    NSLog(@"===========Receive Offer : %@\nsdpType : %ld\n%@\n===========",_userID,(long)[dic[@"type"]integerValue],dic[@"sdp"]);
-    
-    
-    [_peerConnection setRemoteDescription:sdp completionHandler:^(NSError * _Nullable error) {
-        if(error){
-            NSLog(@"%@",error);
-            return;
-        }
-        
-        [weakSelf.peerConnection answerForConstraints:[weakSelf offerOranswerConstraint] completionHandler:^(RTCSessionDescription * _Nullable sdp, NSError * _Nullable error) {
-            if(error){
-                NSLog(@"%@",error);
-                return;
-            }
-            
-            RTCSessionDescription *answerSDP = sdp;
-            
-            [weakSelf.peerConnection setLocalDescription:sdp completionHandler:^(NSError * _Nullable error) {
-                if(error){
-                    NSLog(@"%@",error);
-                    return;
-                }
-                
-                NSDictionary *dic = @{@"sdp":answerSDP.sdp,
-                                      @"type":@(answerSDP.type),
-                                      @"roomID":weakSelf.roomID,
-                                      @"targetID":weakSelf.userID
-                                     };
-                
-                [weakSelf.socketRTCManager answerToStreamWithDic:dic];
-                NSLog(@"===========Send Answer : %@ \n%@\n===========",weakSelf.userID,dic);
-
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    weakSelf.answerStatus.text = @"Answer emitted";
-                    weakSelf.socketStatus.text = [NSString stringWithFormat:@"於%@房間中",weakSelf.roomID];
-                });
-                
-            }];
-        }];
-    }];
-    
-    
-    
-}
-
-- (void)streamReceiveAnswer:(NSArray *)data{
-
-    NSDictionary *dic = data.firstObject;
-    
-    if([_userID isEqualToString:dic[@"targetID"]])return;
-   
-    NSLog(@"%s",__func__);
-    
-    NSLog(@"===========Receive Answer : %@\nsdpType : %ld\n%@\n===========",_userID,(long)[dic[@"type"]integerValue],dic[@"sdp"]);
-    
-    NSString *str = [NSString stringWithFormat:@"userID : %@\ntargetID : %@",_userID,dic[@"targetID"]];
-    _answerStatus.text = [NSString stringWithFormat:@"Answer received\n\n%@",str];
-    
-    __weak typeof(self) weakSelf = self;
-    
-//    [_connectionDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, RTCPeerConnection *connection, BOOL * _Nonnull stop) {
-//    _mode = 0;
-//    //添加代理
-//    connection.delegate = weakSelf;
-//    [connection offerForConstraints :[self offerOranswerConstraint] completionHandler:nil];
-//    [connection answerForConstraints:[self offerOranswerConstraint] completionHandler:nil];
-    
-    RTCSessionDescription *sdp = [[RTCSessionDescription alloc]initWithType:[dic[@"type"]integerValue] sdp:dic[@"sdp"]];
-    
-    [weakSelf.peerConnection setRemoteDescription:sdp completionHandler:^(NSError * _Nullable error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if(error){
-                NSLog(@"%@",error);
-                weakSelf.socketStatus.text = [NSString stringWithFormat:@"於%@房間中發生錯誤\n%@",weakSelf.roomID,error];
-            }else
-                weakSelf.socketStatus.text = [NSString stringWithFormat:@"於%@房間中",weakSelf.roomID];
-
-        });
-
-        
-    }];
-}
-
-- (void)streamReceiveCandidates:(NSArray *)data{
-
-    NSDictionary *dic = data.firstObject;
-    
-    if([_userID isEqualToString:dic[@"targetID"]])return;
-    
-    NSLog(@"%s",__func__);
-
-    RTCIceCandidate *candidate = [[RTCIceCandidate alloc]initWithSdp:dic[@"candidateSdp"] sdpMLineIndex:[dic[@"sdpMLineIndex"]intValue] sdpMid:dic[@"sdpMid"]];
-    [_peerConnection addIceCandidate:candidate];
-}
-
-- (void)socketDisConnected{
-    
-}
-
-- (void)socketError{
-    _socketStatus.text = @"Socket Error : 連線失敗";
-    [self closePeerConnection];
-
-}
-
-- (void)streamCancel{
-    [self closePeerConnection];
-}
-
 #pragma mark - createPeerConnection
 - (void)processLocalTask:(NSDictionary*)dic{
 
     //get all of connections
-    NSString *targetID = dic[@"targetID"];
-    
-//    if ([_userID isEqualToString:targetID]) return;
-    
+    NSString *socketID = dic[@"socketID"];
+        
     BOOL isExist = false;
     //add all of connectionID to array
     for(NSString *str in _connectionIdArray)
-        isExist = (str == targetID);
+        isExist = (str == socketID);
     
     if(!isExist)
-        [_connectionIdArray addObject:targetID];
-   
+        [_connectionIdArray addObject:socketID];
+        
     // To initialize RTCPeerConnection object base on coonections(ConnectionID)
     [self createPeerConnection];
     
@@ -514,12 +330,13 @@ typedef enum : int{
                         
             NSDictionary *dic = @{@"sdp":sdp.sdp,
                                   @"type":@(sdp.type),
-                                  @"roomID":weakSelf.roomID,
-                                  @"targetID":weakSelf.userID
+                                  @"roomName":weakSelf.roomID,
+                                  @"socketID":weakSelf.socketID,
+                                  @"socketRoom":weakSelf.socketRoom
                                 };
             
             [weakSelf.socketRTCManager sendOfferToStreamWithDic:dic];
-            NSLog(@"===========Send Offer : %@ \n%@\n===========",weakSelf.userID,dic);
+            NSLog(@"===========Send Offer : %@ \n%@\n===========",weakSelf.socketID,dic);
 
             dispatch_async(dispatch_get_main_queue(), ^{
                 weakSelf.offerStatus.text = @"Offer emmitted";
@@ -567,6 +384,200 @@ typedef enum : int{
     return [[RTCMediaConstraints alloc] initWithMandatoryConstraints:@{@"OfferToReceiveAudio":@"true",@"VoiceActivityDetection":@"false"} optionalConstraints:dic];
 }
 
+#pragma mark - SocketRTCManagerDelegate
+- (void)socketConnected:(NSArray*)data{
+    _socketStatus.text = @"Socket Connected : 連線成功";
+    
+//    //get data
+//    NSDictionary *dataDic = dic[@"data"];
+//    //get all of connections
+//    NSArray *connections = dataDic[@"connections"];
+//
+//    //add all of connection to array
+//    [_connectionIdArray addObjectsFromArray:connections];
+//
+//    //拿到给自己分配的ID
+//    //    _userId = dataDic[@"you"];
+//
+//    //create p2p object base on connectionIDArray
+//    [_connectionIdArray enumerateObjectsUsingBlock:^(NSString *connectionID, NSUInteger index, BOOL * _Nonnull stop) {
+//
+//        //根据连接ID去初始化 RTCPeerConnection 连接对象
+//        RTCPeerConnection *connection = [self createPeerConnection:connectionID];
+//
+//        //设置这个ID对应的 RTCPeerConnection对象
+//        _connectionDic[connectionID] = connection;
+//    }];
+//
+//    //给每一个点对点连接，都加上本地流
+//    [_connectionDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, RTCPeerConnection *connection, BOOL * _Nonnull stop) {
+//        if (!_localStream)
+//        {
+//            [self createLocalStreaming];
+//        }
+//
+//    }];
+       
+}
+
+- (void)streamConnectedData:(NSArray *)data{
+    
+    _socketID = data.firstObject[@"socketID"];
+    
+    [_createRoomBtn setHidden:false];
+    
+}
+
+- (void)streamReceiveStartCall:(NSArray *)data{
+    
+//    [_joinRoomBtn setHidden:false];
+    _startCallDic = data.firstObject;
+    [self processLocalTask:_startCallDic];
+    [self createOfferAndSetSDP];
+}
+
+- (void)streamReceiveNewRoom:(NSArray *)data{
+    NSArray<NSString*> *roomList = data.firstObject[@"roomList"];
+    _roomID = [roomList.firstObject componentsSeparatedByString:@"+"].lastObject;
+    if(roomList.count>0){
+        NSString *roomName = roomList.firstObject;
+        if([roomName containsString:@"530Test"]){
+            [_joinBtn1 setTitle:roomName forState:UIControlStateNormal] ;
+            _joinBtn1.hidden = false;
+
+        }
+    }
+}
+
+- (void)streamReceiveOffer:(NSArray *)data{
+
+    
+    NSDictionary *dic = data.firstObject;
+    
+    if([_socketID isEqualToString:dic[@"socketID"]]) return;
+    
+    NSLog(@"%s",__func__);
+    
+    _socketRoom = dic[@"socketRoom"];
+    
+    _offerStatus.text = [NSString stringWithFormat:@"Offer received\n\n%@",dic[@"socketID"]];
+    
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [self processLocalTask:dic];
+
+    RTCSessionDescription *sdp = [[RTCSessionDescription alloc]initWithType:[dic[@"type"]integerValue] sdp:dic[@"sdp"]];
+    
+    NSLog(@"===========Receive Offer : %@\nsdpType : %ld\n%@\n===========",dic[@"socketID"],(long)[dic[@"type"]integerValue],dic[@"sdp"]);
+    
+    
+    [_peerConnection setRemoteDescription:sdp completionHandler:^(NSError * _Nullable error) {
+        if(error){
+            NSLog(@"%@",error);
+            return;
+        }
+        
+        [weakSelf.peerConnection answerForConstraints:[weakSelf offerOranswerConstraint] completionHandler:^(RTCSessionDescription * _Nullable sdp, NSError * _Nullable error) {
+            if(error){
+                NSLog(@"%@",error);
+                return;
+            }
+            
+            RTCSessionDescription *answerSDP = sdp;
+            
+            [weakSelf.peerConnection setLocalDescription:sdp completionHandler:^(NSError * _Nullable error) {
+                if(error){
+                    NSLog(@"%@",error);
+                    return;
+                }
+                
+                NSDictionary *dic = @{@"sdp":answerSDP.sdp,
+                                      @"type":@(answerSDP.type),
+                                      @"socketID":weakSelf.socketID,
+                                      @"socketRoom":weakSelf.socketRoom
+                                     };
+                
+                [weakSelf.socketRTCManager answerToStreamWithDic:dic];
+                NSLog(@"===========Send Answer : %@ \n%@\n===========",weakSelf.socketID,dic);
+
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    weakSelf.answerStatus.text = @"Answer emitted";
+                    weakSelf.socketStatus.text = [NSString stringWithFormat:@"於%@房間中",weakSelf.roomID];
+                });
+                
+            }];
+        }];
+    }];
+    
+    
+    
+}
+
+- (void)streamReceiveAnswer:(NSArray *)data{
+
+    NSDictionary *dic = data.firstObject;
+    
+    if([_socketID isEqualToString:dic[@"socketID"]])return;
+   
+    NSLog(@"%s",__func__);
+    
+    NSLog(@"===========Receive Answer : %@\nsdpType : %ld\n%@\n===========",_socketID,(long)[dic[@"type"]integerValue],dic[@"sdp"]);
+    
+    _answerStatus.text = [NSString stringWithFormat:@"Answer received\n\n%@",dic[@"socketID"]];
+    
+    __weak typeof(self) weakSelf = self;
+    
+//    [_connectionDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, RTCPeerConnection *connection, BOOL * _Nonnull stop) {
+//    _mode = 0;
+//    //添加代理
+//    connection.delegate = weakSelf;
+//    [connection offerForConstraints :[self offerOranswerConstraint] completionHandler:nil];
+//    [connection answerForConstraints:[self offerOranswerConstraint] completionHandler:nil];
+    
+    RTCSessionDescription *sdp = [[RTCSessionDescription alloc]initWithType:[dic[@"type"]integerValue] sdp:dic[@"sdp"]];
+    
+    [weakSelf.peerConnection setRemoteDescription:sdp completionHandler:^(NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(error){
+                NSLog(@"%@",error);
+                weakSelf.socketStatus.text = [NSString stringWithFormat:@"於%@房間中發生錯誤\n%@",weakSelf.roomID,error];
+            }else
+                weakSelf.socketStatus.text = [NSString stringWithFormat:@"於%@房間中",weakSelf.roomID];
+
+        });
+
+        
+    }];
+}
+
+- (void)streamReceiveCandidates:(NSArray *)data{
+
+    NSDictionary *dic = data.firstObject;
+    
+    if([_socketID isEqualToString:dic[@"socketID"]])return;
+    
+    NSLog(@"%s",__func__);
+
+    RTCIceCandidate *candidate = [[RTCIceCandidate alloc]initWithSdp:dic[@"candidateSdp"] sdpMLineIndex:[dic[@"sdpMLineIndex"]intValue] sdpMid:dic[@"sdpMid"]];
+    [_peerConnection addIceCandidate:candidate];
+}
+
+- (void)socketDisConnected{
+    
+}
+
+- (void)socketError{
+    _socketStatus.text = @"Socket Error : 連線失敗";
+    [self closePeerConnection];
+
+}
+
+- (void)streamCancel{
+    [self closePeerConnection];
+}
+
 #pragma mark - RTCPeerConnectionDelegate
 /** Called when media is received on a new stream from remote peer. */
 - (void)peerConnection:(RTCPeerConnection *)peerConnection didAddStream:(RTCMediaStream *)stream{
@@ -598,8 +609,8 @@ typedef enum : int{
     [_socketRTCManager sendCandidatesToStreamWithDic:@{@"data": @{@"sdpMid":candidate.sdpMid,
                                                                   @"sdpMLineIndex": @(candidate.sdpMLineIndex),
                                                                   @"candidateSdp": candidate.sdp,
-                                                                  @"roomID": _roomID,
-                                                                  @"targetID": _userID
+                                                                  @"socketID": _socketID,
+                                                                  @"socketRoom": _socketRoom
                                                                  }
                                                       }];
 }
