@@ -65,7 +65,10 @@
                                 </connections>
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bIE-h7-eWq">
-                                <rect key="frame" x="20" y="280" width="46" height="30"/>
+                                <rect key="frame" x="20" y="227" width="46" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="hPD-ZD-TiU"/>
+                                </constraints>
                                 <state key="normal" title="Button"/>
                                 <connections>
                                     <action selector="joinTestRoom:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BOJ-XA-6Ph"/>
@@ -76,8 +79,8 @@
                         <constraints>
                             <constraint firstItem="eyA-zU-N0a" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="0gI-or-RWQ"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="eyA-zU-N0a" secondAttribute="bottom" constant="50" id="4Cg-xw-D6u"/>
-                            <constraint firstItem="Br1-Ll-jZz" firstAttribute="top" secondItem="bIE-h7-eWq" secondAttribute="bottom" constant="117" id="4SO-P3-cYZ"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="bIE-h7-eWq" secondAttribute="trailing" constant="348" id="AIQ-hP-Mbi"/>
+                            <constraint firstItem="Br1-Ll-jZz" firstAttribute="top" secondItem="bIE-h7-eWq" secondAttribute="bottom" constant="50" id="4SO-P3-cYZ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="bIE-h7-eWq" secondAttribute="trailing" constant="50" id="AIQ-hP-Mbi"/>
                             <constraint firstItem="qtL-RV-ImI" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ftw-j4-Sjc"/>
                             <constraint firstItem="Br1-Ll-jZz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="GBC-E0-2al"/>
                             <constraint firstItem="aa8-YR-kjP" firstAttribute="top" secondItem="qtL-RV-ImI" secondAttribute="bottom" constant="100" id="GZZ-cT-biE"/>
@@ -86,7 +89,6 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Br1-Ll-jZz" secondAttribute="trailing" constant="15" id="KSd-Dj-G9S"/>
                             <constraint firstItem="bIE-h7-eWq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="OqK-iy-46H"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Soh-PS-aa9" secondAttribute="trailing" constant="50" id="TNW-eT-NHw"/>
-                            <constraint firstItem="bIE-h7-eWq" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="236" id="ZMn-4h-qC2"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="eyA-zU-N0a" secondAttribute="trailing" constant="25" id="cUb-Zi-TK6"/>
                             <constraint firstItem="qtL-RV-ImI" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="gFY-1f-CVr"/>
                             <constraint firstItem="Br1-Ll-jZz" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="vsI-2z-bfA"/>
