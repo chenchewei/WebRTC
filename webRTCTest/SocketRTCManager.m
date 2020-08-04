@@ -6,7 +6,7 @@
 //  Copyright © 2020 SamWu. All rights reserved.
 //
 
-#define DEVELOP_SocketURL @"https://f72b322f5e64.ngrok.io"
+#define DEVELOP_SocketURL @"https://630cc1a2ffd9.ngrok.io"
 
 #import "SocketRTCManager.h"
 
@@ -47,6 +47,7 @@ static SocketRTCManager *socketRTCManager = nil;
     
     [socketClient connectWithTimeoutAfter:5.0 withHandler:^{
         NSLog(@"[RTCSocket] [on] Connect timeout");
+        [self connect];
     }];
     
     [socketClient on:@"startCall" callback:^(NSArray *data, SocketAckEmitter *ack) {
@@ -115,13 +116,11 @@ static SocketRTCManager *socketRTCManager = nil;
         
     }];
     
-    [socketClient on:@"cancel" callback:^(NSArray *data, SocketAckEmitter *ack) {
+    [socketClient on:@"leaveRoom" callback:^(NSArray *data, SocketAckEmitter *ack) {
         
-        NSLog(@"[RTCSocket] [on] cancel");
-        
-        [self killHandlerAndDisConnect];
-        
-        [_delegate streamCancel];
+        NSLog(@"[RTCSocket] [on] leaveRoom");
+                
+        [_delegate streamLeaveRoom:data];
         
     }];
     
@@ -170,5 +169,9 @@ static SocketRTCManager *socketRTCManager = nil;
     [socketClient emit:@"ice_candidates" with:@[dic]];
 }
 
+- (void)leaveRoomToStreamWithDic:(NSDictionary *)dic{
+    NSLog(@"[RTCSocket] [emit] leaveRoom");
+    [socketClient emit:@"leaveRoom" with:@[dic]];
+}
 
 @end

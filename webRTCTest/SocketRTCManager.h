@@ -47,7 +47,7 @@
 
 - (void)streamReceiveCandidates:(NSArray *)data;
 
-- (void)streamCancel;
+- (void)streamLeaveRoom:(NSArray *)data;
 
 @end
 
@@ -73,5 +73,8 @@
 - (void)answerToStreamWithDic:(NSDictionary *)dic;
 
 - (void)sendCandidatesToStreamWithDic:(NSDictionary *)dic;
+
+- (void)leaveRoomToStreamWithDic:(NSDictionary *)dic;
+
 @end
 
