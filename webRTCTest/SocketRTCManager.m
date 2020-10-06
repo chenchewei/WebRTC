@@ -6,7 +6,7 @@
 //  Copyright © 2020 SamWu. All rights reserved.
 //
 
-#define DEVELOP_SocketURL @"https://630cc1a2ffd9.ngrok.io"
+#define DEVELOP_SocketURL @"https://81bf627a37fb.ngrok.io"
 
 #import "SocketRTCManager.h"
 
