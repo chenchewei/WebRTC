@@ -17,6 +17,7 @@
 		3500886724C817D000EA58C8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3500886624C817D000EA58C8 /* main.m */; };
 		3500887124C817D000EA58C8 /* webRTCTestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3500887024C817D000EA58C8 /* webRTCTestTests.m */; };
 		3500887C24C817D000EA58C8 /* webRTCTestUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3500887B24C817D000EA58C8 /* webRTCTestUITests.m */; };
+		35026C8A253709490008C0C6 /* PeerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 35026C89253709490008C0C6 /* PeerConnection.m */; };
 		35F6091424C92D770075B066 /* SocketRTCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35F6091324C92D770075B066 /* SocketRTCManager.m */; };
 		45E53F19B4DAA4DC7E5D4BBA /* Pods_webRTCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 731056D1C53403F0288EB872 /* Pods_webRTCTest.framework */; };
 		DEB6613A5B7A23D93828FAB1 /* Pods_webRTCTest_webRTCTestUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 282E2CB76AE18D975E34E7F3 /* Pods_webRTCTest_webRTCTestUITests.framework */; };
@@ -59,6 +60,8 @@
 		3500887724C817D000EA58C8 /* webRTCTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = webRTCTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3500887B24C817D000EA58C8 /* webRTCTestUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = webRTCTestUITests.m; sourceTree = "<group>"; };
 		3500887D24C817D000EA58C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		35026C88253709490008C0C6 /* PeerConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PeerConnection.h; sourceTree = "<group>"; };
+		35026C89253709490008C0C6 /* PeerConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PeerConnection.m; sourceTree = "<group>"; };
 		35F6091224C92D770075B066 /* SocketRTCManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SocketRTCManager.h; sourceTree = "<group>"; };
 		35F6091324C92D770075B066 /* SocketRTCManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SocketRTCManager.m; sourceTree = "<group>"; };
 		35F6091924C938110075B066 /* webRTC-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "webRTC-Prefix.pch"; sourceTree = "<group>"; };
@@ -132,13 +135,15 @@
 				3500885824C817CD00EA58C8 /* SceneDelegate.m */,
 				3500885A24C817CD00EA58C8 /* ViewController.h */,
 				3500885B24C817CD00EA58C8 /* ViewController.m */,
+				35F6091224C92D770075B066 /* SocketRTCManager.h */,
+				35F6091324C92D770075B066 /* SocketRTCManager.m */,
 				3500885D24C817CD00EA58C8 /* Main.storyboard */,
 				3500886024C817D000EA58C8 /* Assets.xcassets */,
 				3500886224C817D000EA58C8 /* LaunchScreen.storyboard */,
 				3500886524C817D000EA58C8 /* Info.plist */,
 				3500886624C817D000EA58C8 /* main.m */,
-				35F6091224C92D770075B066 /* SocketRTCManager.h */,
-				35F6091324C92D770075B066 /* SocketRTCManager.m */,
+				35026C88253709490008C0C6 /* PeerConnection.h */,
+				35026C89253709490008C0C6 /* PeerConnection.m */,
 			);
 			path = webRTCTest;
 			sourceTree = "<group>";
@@ -425,6 +430,7 @@
 				35F6091424C92D770075B066 /* SocketRTCManager.m in Sources */,
 				3500885C24C817CD00EA58C8 /* ViewController.m in Sources */,
 				3500885624C817CD00EA58C8 /* AppDelegate.m in Sources */,
+				35026C8A253709490008C0C6 /* PeerConnection.m in Sources */,
 				3500886724C817D000EA58C8 /* main.m in Sources */,
 				3500885924C817CD00EA58C8 /* SceneDelegate.m in Sources */,
 			);
@@ -595,6 +601,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 55307C2A2BDB5F966962E458 /* Pods-webRTCTest.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DVK8V4759Q;
@@ -617,6 +624,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 67B81BE0DFDCCBEF705EBE66 /* Pods-webRTCTest.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DVK8V4759Q;
@@ -681,6 +689,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7CDDEB7699DB1E7AEE63529B /* Pods-webRTCTest-webRTCTestUITests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DVK8V4759Q;
 				INFOPLIST_FILE = webRTCTestUITests/Info.plist;
@@ -700,6 +709,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9BBE68B34B45DA9AE984C6C9 /* Pods-webRTCTest-webRTCTestUITests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DVK8V4759Q;
 				INFOPLIST_FILE = webRTCTestUITests/Info.plist;

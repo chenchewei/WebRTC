@@ -72,7 +72,7 @@ RTC_EXPORT
 @protocol RTCPeerConnectionDelegate <NSObject>
 
 /** Called when the SignalingState changed. */
-- (void)peerConnection:(RTCPeerConnection *)peerConnection
+@optional - (void)peerConnection:(RTCPeerConnection *)peerConnection
     didChangeSignalingState:(RTCSignalingState)stateChanged;
 
 /** Called when media is received on a new stream from remote peer. */
@@ -80,18 +80,18 @@ RTC_EXPORT
           didAddStream:(RTCMediaStream *)stream;
 
 /** Called when a remote peer closes a stream. */
-- (void)peerConnection:(RTCPeerConnection *)peerConnection
+@optional - (void)peerConnection:(RTCPeerConnection *)peerConnection
        didRemoveStream:(RTCMediaStream *)stream;
 
 /** Called when negotiation is needed, for example ICE has restarted. */
-- (void)peerConnectionShouldNegotiate:(RTCPeerConnection *)peerConnection;
+@optional - (void)peerConnectionShouldNegotiate:(RTCPeerConnection *)peerConnection;
 
 /** Called any time the IceConnectionState changes. */
-- (void)peerConnection:(RTCPeerConnection *)peerConnection
+@optional - (void)peerConnection:(RTCPeerConnection *)peerConnection
     didChangeIceConnectionState:(RTCIceConnectionState)newState;
 
 /** Called any time the IceGatheringState changes. */
-- (void)peerConnection:(RTCPeerConnection *)peerConnection
+@optional - (void)peerConnection:(RTCPeerConnection *)peerConnection
     didChangeIceGatheringState:(RTCIceGatheringState)newState;
 
 /** New ice candidate has been found. */
@@ -99,11 +99,11 @@ RTC_EXPORT
     didGenerateIceCandidate:(RTCIceCandidate *)candidate;
 
 /** Called when a group of local Ice candidates have been removed. */
-- (void)peerConnection:(RTCPeerConnection *)peerConnection
+@optional - (void)peerConnection:(RTCPeerConnection *)peerConnection
     didRemoveIceCandidates:(NSArray<RTCIceCandidate *> *)candidates;
 
 /** New data channel has been opened. */
-- (void)peerConnection:(RTCPeerConnection *)peerConnection
+@optional - (void)peerConnection:(RTCPeerConnection *)peerConnection
     didOpenDataChannel:(RTCDataChannel *)dataChannel;
 
 @end

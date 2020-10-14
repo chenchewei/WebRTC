@@ -6,7 +6,7 @@
 //  Copyright © 2020 SamWu. All rights reserved.
 //
 
-#define DEVELOP_SocketURL @"https://81bf627a37fb.ngrok.io"
+#define DEVELOP_SocketURL @"https://4fcc0df5aba8.ngrok.io"
 
 #import "SocketRTCManager.h"
 
@@ -38,7 +38,7 @@ static SocketRTCManager *socketRTCManager = nil;
         NSURL *url = [[NSURL alloc]initWithString:DEVELOP_SocketURL];
         socketManager = [[SocketManager alloc] initWithSocketURL:url config:@{@"log": @NO , @"compress": @YES}];
         socketClient = socketManager.defaultSocket;
-        NSLog(@"%@",socketClient.manager.socketURL);
+        //NSLog(@"%@",socketClient.manager.socketURL);
     }
     return self;
 }
@@ -46,69 +46,69 @@ static SocketRTCManager *socketRTCManager = nil;
 - (void)connect{
     
     [socketClient connectWithTimeoutAfter:5.0 withHandler:^{
-        NSLog(@"[RTCSocket] [on] Connect timeout");
+        //NSLog(@"[RTCSocket] [on] Connect timeout");
         [self connect];
     }];
     
     [socketClient on:@"startCall" callback:^(NSArray *data, SocketAckEmitter *ack) {
         
-        NSLog(@"[RTCSocket] [on] startCall");
+        //NSLog(@"[RTCSocket] [on] startCall");
         [_delegate streamReceiveStartCall:data];
         
     }];
     
     [socketClient on:@"connectedData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ack) {
        
-        NSLog(@"[RTCSocket] [on] connectedData\n==>%@",data);
+        //NSLog(@"[RTCSocket] [on] connectedData\n==>%@",data);
         [_delegate streamConnectedData:data];
         
     }];
     
     [socketClient on:@"newRoom" callback:^(NSArray *data, SocketAckEmitter *ack) {
         
-        NSLog(@"[RTCSocket] [on] newRoom");
+        //NSLog(@"[RTCSocket] [on] newRoom");
         [_delegate streamReceiveNewRoom:data];
         
     }];
     
     [socketClient on:@"connect" callback:^(NSArray *data, SocketAckEmitter *ack) {
         
-        NSLog(@"[RTCSocket] [on] connect");
+        //NSLog(@"[RTCSocket] [on] connect");
         [_delegate socketConnected:data];
         
     }];
     
     [socketClient on:@"offer" callback:^(NSArray *data, SocketAckEmitter *ack) {
 
-        NSLog(@"[RTCSocket] [on] offer");
+        //NSLog(@"[RTCSocket] [on] offer");
         [_delegate streamReceiveOffer:data];
 
     }];
     
     [socketClient on:@"answer" callback:^(NSArray *data, SocketAckEmitter *ack) {
         
-        NSLog(@"[RTCSocket] [on] answer");
+        //NSLog(@"[RTCSocket] [on] answer");
         [_delegate streamReceiveAnswer:data];
         
     }];
     
     [socketClient on:@"ice_candidates" callback:^(NSArray *data, SocketAckEmitter *ack) {
         
-        NSLog(@"[RTCSocket] [on] ice_candidates");
+        //NSLog(@"[RTCSocket] [on] ice_candidates");
         [_delegate streamReceiveCandidates:data];
         
     }];
     
     [socketClient on:@"disconnect" callback:^(NSArray *data, SocketAckEmitter *ack) {
         
-        NSLog(@"[RTCSocket] [on] disconnect");
+        //NSLog(@"[RTCSocket] [on] disconnect");
         [_delegate socketDisConnected];
         
     }];
     
     [socketClient on:@"error" callback:^(NSArray *data, SocketAckEmitter *ack) {
         
-        NSLog(@"[RTCSocket] [on] error");
+        //NSLog(@"[RTCSocket] [on] error");
         
         [self killHandlerAndDisConnect];
         
@@ -118,7 +118,7 @@ static SocketRTCManager *socketRTCManager = nil;
     
     [socketClient on:@"leaveRoom" callback:^(NSArray *data, SocketAckEmitter *ack) {
         
-        NSLog(@"[RTCSocket] [on] leaveRoom");
+        //NSLog(@"[RTCSocket] [on] leaveRoom");
                 
         [_delegate streamLeaveRoom:data];
         
@@ -142,7 +142,7 @@ static SocketRTCManager *socketRTCManager = nil;
 
 - (BOOL)startCallToStreamWithSocketRoom:(NSString*)socketRoom SocketID:(NSString *)socketID{
     if(socketClient.status == SocketIOStatusConnected){
-        NSLog(@"[RTCSocket] [emit] startCall");
+        //NSLog(@"[RTCSocket] [emit] startCall");
         
         NSDictionary *dic = @{@"socketRoom":socketRoom,
                               @"socketID":socketID
@@ -154,23 +154,23 @@ static SocketRTCManager *socketRTCManager = nil;
 }
 
 - (void)sendOfferToStreamWithDic:(NSDictionary *)dic{
-        NSLog(@"[RTCSocket] [emit] offer");
+        //NSLog(@"[RTCSocket] [emit] offer");
         [socketClient emit:@"offer" with:@[dic]];
 }
 
 - (void)answerToStreamWithDic:(NSDictionary *)dic{
-    NSLog(@"[RTCSocket] [emit] answer");
+    //NSLog(@"[RTCSocket] [emit] answer");
         
     [socketClient emit:@"answer" with:@[dic]];
 }
 
 - (void)sendCandidatesToStreamWithDic:(NSDictionary *)dic{
-    NSLog(@"[RTCSocket] [emit] ice_candidates");
+    //NSLog(@"[RTCSocket] [emit] ice_candidates");
     [socketClient emit:@"ice_candidates" with:@[dic]];
 }
 
 - (void)leaveRoomToStreamWithDic:(NSDictionary *)dic{
-    NSLog(@"[RTCSocket] [emit] leaveRoom");
+    //NSLog(@"[RTCSocket] [emit] leaveRoom");
     [socketClient emit:@"leaveRoom" with:@[dic]];
 }
 
