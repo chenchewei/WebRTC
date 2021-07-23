@@ -61,6 +61,8 @@ typedef enum : int{
 @property (strong, nonatomic) IBOutlet UILabel *offerStatus;
 @property (strong, nonatomic) IBOutlet UILabel *answerStatus;
 
+@property (strong, nonatomic) IBOutlet UIView *view_camera;
+
 @property (strong,nonatomic) NSMutableDictionary *remoteAudioTracks;
 @property (strong,nonatomic) NSMutableDictionary *connectionDic;
 @property (strong,nonatomic) NSMutableArray *roomMemberArray;
@@ -117,7 +119,7 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
 //getMediaTrackWithFactoryInit
 - (void)getMediaTrackWithFactoryInit{
     if (!rtcFactory)
-        rtcFactory = [[RTCPeerConnectionFactory alloc]init];
+        rtcFactory = [[RTCPeerConnectionFactory alloc]init];// p.34 1  // 建立peer local stream
     
     if(!_localStream)
        [self createLocalStream];
@@ -128,10 +130,10 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
 - (void)createLocalStream{
     _localStream = [rtcFactory mediaStreamWithStreamId:[NSString stringWithFormat:@"localStream_%@",[NSUUID UUID]]];
     
-    [self checkMicroPhonePermission];
+    [self checkPermission];
 }
 
-- (void)checkMicroPhonePermission{
+- (void)checkPermission{
     
     AVCaptureDeviceDiscoverySession *deviceSession = [AVCaptureDeviceDiscoverySession
                                                       discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInMicrophone]
@@ -273,7 +275,7 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
     /** set p2p object to connectionDic */
     [_roomMemberArray enumerateObjectsUsingBlock:^(NSString *connectionID, NSUInteger index, BOOL * _Nonnull stop) {
         if(![connectionID isEqualToString:_socketID]){
-            //根据连接ID去初始化 RTCPeerConnection 连接对象
+            //根据连接ID去初始化 RTCPeerConnection 连接对象，連接別人
             RTCPeerConnection *peerConnection = [self createPeerConnection];
             
             //设置这个ID对应的 RTCPeerConnection对象
@@ -310,7 +312,7 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
     [_connectionDic enumerateKeysAndObjectsUsingBlock:^(NSString *connectionID, RTCPeerConnection *connection, BOOL * _Nonnull stop) {
         
         if(![connectionID isEqualToString:_socketID]) {
-            
+            // 建立SDP offer
             [connection offerForConstraints:[PeerConnection offerOranswerConstraint] completionHandler:^(RTCSessionDescription * _Nullable sdp, NSError * _Nullable error) {
                 if(error){ NSLog(@"%@",error); return; }
                 
@@ -324,7 +326,7 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
                                           @"receiver":connectionID,
                                           @"socketRoom":weakSelf.socketRoom
                                          };
-                    
+                    // 送給server
                     [weakSelf.socketRTCManager sendOfferToStreamWithDic:dic];
 //                    NSLog(@"\n[[===========createOfferAndSetSDP Send Offer : %@ To : %@\n%@\n===========]]",weakSelf.socketID,key,dic);
                     
