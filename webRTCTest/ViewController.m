@@ -41,44 +41,44 @@
 //#define STREAM     @"localStream"
 //#define AUDIOTRACK @"audioTest"
 
-typedef enum : int{
+typedef enum : int {
     Caller = 0,
     Receiver = 1,
 } Mode;
 
 @interface ViewController ()<SocketRTCManagerDelegate,RTCPeerConnectionDelegate>
-@property (strong, nonatomic) IBOutlet UILabel *socketStatus;
-@property (strong, nonatomic) IBOutlet UIButton *createRoomBtn;
-@property (strong, nonatomic) IBOutlet UITableView *roomTableView;
-@property (strong, nonatomic) IBOutlet UILabel *socketUser;
+@property (strong, nonatomic) IBOutlet UILabel *label_socketStatus;
+@property (strong, nonatomic) IBOutlet UIButton *btn_createRoom;
+@property (strong, nonatomic) IBOutlet UITableView *tableView_room;
+@property (strong, nonatomic) IBOutlet UILabel *label_socketUser;
 
 @property (strong,nonatomic) SocketRTCManager *socketRTCManager;
 
 //@property (strong,nonatomic) RTCPeerConnectionFactory *rtcFactory;
-@property (strong,nonatomic) RTCPeerConnection *peerConnection;
-@property (strong,nonatomic) RTCMediaStream *localStream;
+@property (strong, nonatomic) RTCPeerConnection *peerConnection;
+@property (strong, nonatomic) RTCMediaStream *localStream;
 
-@property (strong, nonatomic) IBOutlet UILabel *offerStatus;
-@property (strong, nonatomic) IBOutlet UILabel *answerStatus;
+@property (strong, nonatomic) IBOutlet UILabel *label_offerStatus;
+@property (strong, nonatomic) IBOutlet UILabel *label_answerStatus;
 
 @property (strong, nonatomic) IBOutlet UIView *view_camera;
 
-@property (strong,nonatomic) NSMutableDictionary *remoteAudioTracks;
-@property (strong,nonatomic) NSMutableDictionary *connectionDic;
-@property (strong,nonatomic) NSMutableArray *roomMemberArray;
+@property (strong, nonatomic) NSMutableDictionary *remoteAudioTracks;
+@property (strong, nonatomic) NSMutableDictionary *connectionDic;
+@property (strong, nonatomic) NSMutableArray *roomMemberArray;
 
-@property (strong,nonatomic) NSDictionary *startCallDic;
+@property (strong, nonatomic) NSDictionary *startCallDic;
 
-@property (strong,nonatomic) NSMutableArray<NSString*> *roomList;
-@property (strong,nonatomic) NSString *socketRoom;
-@property (strong,nonatomic) NSString *socketID;
-@property (strong,nonatomic) NSString *targetID;
-@property (strong,nonatomic) NSString *userID;
-@property (strong,nonatomic) NSString *roomID;
+@property (strong, nonatomic) NSMutableArray<NSString*> *roomList;
+@property (strong, nonatomic) NSString *socketRoom;
+@property (strong, nonatomic) NSString *socketID;
+@property (strong, nonatomic) NSString *targetID;
+@property (strong, nonatomic) NSString *userID;
+@property (strong, nonatomic) NSString *roomID;
 
-@property (strong, nonatomic) IBOutlet UIButton *joinBtn1;
+@property (strong, nonatomic) IBOutlet UIButton *btn_join;
 
-@property (assign,nonatomic) Mode *mode;
+@property (assign, nonatomic) Mode *mode;
 
 @end
 
@@ -109,17 +109,17 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
     _roomMemberArray = @[].mutableCopy;
     _remoteAudioTracks = @{}.mutableCopy;
     
-    [_roomTableView registerNib:[UINib nibWithNibName:@"ViewController" bundle:nil] forCellReuseIdentifier:@"cell"];
+    [_tableView_room registerNib: [UINib nibWithNibName: @"ViewController" bundle: nil] forCellReuseIdentifier: @"cell"];
     
     //keep the screen on
-    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+    [[UIApplication sharedApplication] setIdleTimerDisabled: YES];
     
 }
 
 //getMediaTrackWithFactoryInit
 - (void)getMediaTrackWithFactoryInit{
     if (!rtcFactory)
-        rtcFactory = [[RTCPeerConnectionFactory alloc]init];// p.34 1  // 建立peer local stream
+        rtcFactory = [[RTCPeerConnectionFactory alloc] init];// p.34 1  // 建立peer local stream
     
     if(!_localStream)
        [self createLocalStream];
@@ -128,7 +128,7 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
 
 //createLocalStream
 - (void)createLocalStream{
-    _localStream = [rtcFactory mediaStreamWithStreamId:[NSString stringWithFormat:@"localStream_%@",[NSUUID UUID]]];
+    _localStream = [rtcFactory mediaStreamWithStreamId: [NSString stringWithFormat: @"localStream_%@", [NSUUID UUID]]];
     
     [self checkPermission];
 }
@@ -136,41 +136,40 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
 - (void)checkPermission{
     
     AVCaptureDeviceDiscoverySession *deviceSession = [AVCaptureDeviceDiscoverySession
-                                                      discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInMicrophone]
-                                                      mediaType:AVMediaTypeAudio position:0];
+                                                      discoverySessionWithDeviceTypes: @[AVCaptureDeviceTypeBuiltInMicrophone]
+                                                      mediaType:AVMediaTypeAudio position: 0];
     
     AVCaptureDevice *device = [deviceSession.devices firstObject];
     
     
-    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
-    if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusNotDetermined){
-        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType: AVMediaTypeAudio];
+    if (authStatus == AVAuthorizationStatusDenied || authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusNotDetermined) {
+        [AVCaptureDevice requestAccessForMediaType: AVMediaTypeAudio completionHandler: ^(BOOL granted) {
            if(!granted)
                NSLog(@"Microphone permission denied.");
-           else{
+           else {
                if (device) {
                    
-                   [[AVAudioSession sharedInstance]setActive:false error:nil];
-                   [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayAndRecord mode:AVAudioSessionModeVoiceChat options:AVAudioSessionCategoryOptionMixWithOthers error:nil];
+                   [[AVAudioSession sharedInstance]setActive: false error: nil];
+                   [[AVAudioSession sharedInstance]setCategory: AVAudioSessionCategoryPlayAndRecord mode: AVAudioSessionModeVoiceChat options: AVAudioSessionCategoryOptionMixWithOthers error: nil];
                    
-                   [_localStream addAudioTrack:[rtcFactory audioTrackWithTrackId:[NSString stringWithFormat:@"AudioTrack_%@",[NSUUID UUID]]]];
-                                      
-                   //NSLog(@"setLocalStream");
+                   [_localStream addAudioTrack: [rtcFactory audioTrackWithTrackId: [NSString stringWithFormat: @"AudioTrack_%@", [NSUUID UUID]]]];
+                   [self captureFrontCameraImage];
                }
            }
         }];
         
     }
-    else{
+    else {
         if (device) {
         
-            [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayAndRecord mode:AVAudioSessionModeVoiceChat options:AVAudioSessionCategoryOptionInterruptSpokenAudioAndMixWithOthers error:nil];
+            [[AVAudioSession sharedInstance]setCategory: AVAudioSessionCategoryPlayAndRecord mode: AVAudioSessionModeVoiceChat options: AVAudioSessionCategoryOptionInterruptSpokenAudioAndMixWithOthers error: nil];
 
-            [_localStream addAudioTrack:[rtcFactory audioTrackWithTrackId:[NSString stringWithFormat:@"AudioTrack_%@",[NSUUID UUID]]]];
+            [_localStream addAudioTrack: [rtcFactory audioTrackWithTrackId: [NSString stringWithFormat: @"AudioTrack_%@", [NSUUID UUID]]]];
                         
-            //NSLog(@"setLocalStream");
+            [self captureFrontCameraImage];
             
-        }else
+        } else
             NSLog(@"Microphone cannot open in this device.");
     }
 
@@ -201,6 +200,45 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
     
 }
 
+- (void)captureFrontCameraImage {
+    AVCaptureSession *session = [[AVCaptureSession alloc] init];
+    
+    [session setSessionPreset: AVCaptureSessionPresetPhoto];
+    
+    AVCaptureDevice *inputDevice = nil;
+    
+    AVCaptureDeviceDiscoverySession *captureDeviceDiscoverySession = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes: @[AVCaptureDeviceTypeBuiltInWideAngleCamera]
+                                                                                                                            mediaType: AVMediaTypeVideo
+                                                                                                                             position: AVCaptureDevicePositionFront];
+    NSArray *devices = [captureDeviceDiscoverySession devices];
+    
+    for(AVCaptureDevice *camera in devices) {
+        if([camera position] == AVCaptureDevicePositionFront) { // is front camera
+            inputDevice = camera;
+            break;
+        }
+    }
+    
+    NSError *error;
+    AVCaptureDeviceInput *deviceInput = [AVCaptureDeviceInput deviceInputWithDevice: inputDevice error: &error];
+    if(error != nil) {
+        NSLog(@"%@", error.localizedDescription);
+        return;
+    }
+    
+    if([session canAddInput: deviceInput]) {
+        [session addInput: deviceInput];
+    }
+    
+    AVCaptureVideoPreviewLayer *previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession: session];
+    
+    [previewLayer setVideoGravity: AVLayerVideoGravityResizeAspect];
+    // 不能用_view_camera.frame，畫面會跑到奇怪得地方顯示
+    [previewLayer setFrame: _view_camera.bounds];
+    [_view_camera.layer insertSublayer: previewLayer atIndex: 0];
+    [session startRunning];
+}
+
 - (void)socketRTCManagerInit{
     _socketRTCManager = [SocketRTCManager getInstance];
     _socketRTCManager.delegate = self;
@@ -214,21 +252,19 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
     bool isLoud = !sender.isSelected;
     AVAudioSession *session = [AVAudioSession sharedInstance];
 
-    if (isLoud) {
-        
+    if(isLoud) {
         // Turn off the speaker
-        sender.selected = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
-        [sender setTitle:@"擴音" forState:UIControlStateNormal];
-    }
-    else {
+        sender.selected = [session overrideOutputAudioPort: AVAudioSessionPortOverrideSpeaker error: nil];
+        [sender setTitle: @"擴音" forState: UIControlStateSelected];
+    } else {
         NSError *error = nil;
         // Turn on the speaker
-        BOOL isSuccess = [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:nil];
-        if (isSuccess) {
+        BOOL isSuccess = [session overrideOutputAudioPort: AVAudioSessionPortOverrideNone error: nil];
+        if(isSuccess) {
             sender.selected = !isSuccess;
-            [sender setTitle:@"手持" forState:UIControlStateNormal];
-        }else{
-            NSLog(@"%@",error.description);
+            [sender setTitle: @"手持" forState: UIControlStateNormal];
+        } else {
+            NSLog(@"%@", error.description);
         }
     }
 }
@@ -247,7 +283,7 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
     
     BOOL isJoinSuccessed = [_socketRTCManager startCallToStreamWithSocketRoom:_socketRoom SocketID:_socketID];
     
-    _socketStatus.text = (isJoinSuccessed)? @"正在建立房間" : @"Socket尚未連接，建立房間失敗";
+    _label_socketStatus.text = (isJoinSuccessed)? @"正在建立房間" : @"Socket尚未連接，建立房間失敗";
     
 }
 
@@ -339,23 +375,23 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
     }];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.offerStatus.text = @"Offer emmitted";
-        weakSelf.socketStatus.text = @"房間已建立";
+        weakSelf.label_offerStatus.text = @"Offer emmitted";
+        weakSelf.label_socketStatus.text = @"房間已建立";
     });
     
 }
 
 #pragma mark - SocketRTCManagerDelegate
 - (void)socketConnected:(NSArray*)data{
-    _socketStatus.text = @"Socket Connected : 連線成功";
+    _label_socketStatus.text = @"Socket Connected : 連線成功";
 }
 
 //socket connect and get self socketID
 - (void)streamConnectedData:(NSArray *)data{
     
     _socketID = data.firstObject[@"socketID"];
-    _socketUser.text = _socketID;
-    [_createRoomBtn setHidden:false];
+    _label_socketUser.text = _socketID;
+    [_btn_createRoom setHidden:false];
 }
 
 //加入房間
@@ -376,12 +412,12 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
             }
         }
         
-        [_roomTableView reloadData];
+        [_tableView_room reloadData];
         
         NSString *roomName = _roomList.firstObject;
         if([roomName containsString:@"530Test"]){
-            [_joinBtn1 setTitle:roomName forState:UIControlStateNormal] ;
-            _joinBtn1.hidden = false;
+            [_btn_join setTitle:roomName forState:UIControlStateNormal] ;
+            _btn_join.hidden = false;
             
         }
     }
@@ -409,7 +445,7 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
     if(![_socketID isEqualToString:dic[@"receiver"]]) return;
     
     _socketRoom = dic[@"socketRoom"];
-    _offerStatus.text = [NSString stringWithFormat:@"Offer received\n\n%@",sender];
+    _label_offerStatus.text = [NSString stringWithFormat:@"Offer received\n\n%@",sender];
     
     if (!_localStream)
         [self createLocalStream];
@@ -455,8 +491,8 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
                 [weakSelf.socketRTCManager answerToStreamWithDic:dic];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    weakSelf.answerStatus.text = @"Answer emitted";
-                    weakSelf.socketStatus.text = [NSString stringWithFormat:@"於%@房間中",weakSelf.roomID];
+                    weakSelf.label_answerStatus.text = @"Answer emitted";
+                    weakSelf.label_socketStatus.text = [NSString stringWithFormat:@"於%@房間中",weakSelf.roomID];
                 });
                 
             }];
@@ -472,7 +508,7 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
     // If receiver is not self, then return
     if(![_socketID isEqualToString:dic[@"receiver"]]) return;
     
-    _answerStatus.text = [NSString stringWithFormat:@"Answer received\n\n%@",sender];
+    _label_answerStatus.text = [NSString stringWithFormat:@"Answer received\n\n%@",sender];
     
     // Get sender's peerConnection
     RTCPeerConnection *connection = _connectionDic[sender];
@@ -494,7 +530,7 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
     [connection setRemoteDescription:sdp completionHandler:^(NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             NSString *errorStr = [NSString stringWithFormat:@"發生錯誤\n%@",error];
-            _socketStatus.text = [NSString stringWithFormat:@"於%@房間中%@",_roomID,(error)?errorStr:@""];
+            _label_socketStatus.text = [NSString stringWithFormat:@"於%@房間中%@",_roomID,(error)?errorStr:@""];
         });
     }];
 }
@@ -523,7 +559,7 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
 }
 
 - (void)socketError{
-    _socketStatus.text = @"Socket Error : 連線失敗";
+    _label_socketStatus.text = @"Socket Error : 連線失敗";
     [self closeAll];
 }
 
@@ -544,7 +580,7 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
             }
         }
         
-        [_joinBtn1 setHidden:true];
+        [_btn_join setHidden:true];
     }else{
         [_connectionDic removeObjectForKey:socketID];
         
@@ -556,9 +592,9 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
         }];
     }
     
-    _socketStatus.text = @"Socket Connected : 連線成功";
+    _label_socketStatus.text = @"Socket Connected : 連線成功";
 
-    [_roomTableView reloadData];
+    [_tableView_room reloadData];
 }
 
 #pragma mark - RTCPeerConnectionDelegate
@@ -623,7 +659,7 @@ static RTCPeerConnectionFactory *rtcFactory = nil;
     
     BOOL isJoinSuccessed = [_socketRTCManager startCallToStreamWithSocketRoom:_socketRoom SocketID:_socketID];
     
-    _socketStatus.text = (isJoinSuccessed)? @"正在建立房間" : @"Socket尚未連接，建立房間失敗";
+    _label_socketStatus.text = (isJoinSuccessed)? @"正在建立房間" : @"Socket尚未連接，建立房間失敗";
 }
 
 #pragma mark - Function
